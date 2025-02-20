@@ -19,6 +19,12 @@ retrieve_secret() {
     gcloud secrets versions access latest --secret="$secret_name" > "$output_file"
 }
 
+_ACCESS_TOKEN=gcloud secrets versions access latest --secret="github-secret"
+
+git config --global url."https://$_ACCESS_TOKEN@github.com/".insteadOf "https://github.com/"
+git clone https://github.com/ravinaparteti/kubernetes.git
+git fetch --unshallow
+
 # Define function folders for Kubernetes deployment
 declare -A function_folders=(
     ["categorization"]="categorization_tool"
@@ -36,8 +42,8 @@ retrieve_and_store_env() {
     retrieve_secret "$secret_name" "$env_file"
     
     echo "Updating ConfigMap for $function_name..."
-    kubectl delete configmap "${function_name}-config" --ignore-not-found
-    kubectl create configmap "${function_name}-config" --from-file="$env_file" | kubectl apply -f -
+    kubectl delete configmap "${function_name}-env-config" --ignore-not-found
+    kubectl create configmap "${function_name}-env-config" --from-file="$env_file"
 }
 
 # Build and push Docker image to Artifact Registry
