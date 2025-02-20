@@ -1,2 +1,2 @@
 def hello_world(request):
-    return "final "
+    return "final test with Kubernetes"
