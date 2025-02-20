@@ -6,7 +6,7 @@ authenticate_gke() {
         echo "Authenticating to GKE cluster..."
         gcloud container clusters get-credentials cluster --region us-central1 --project prince-project-446008
     else
-        echo "Already authenticated to GKE cluster ."
+        echo "Already authenticated to GKE cluster."
     fi
 }
 
