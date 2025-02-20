@@ -109,6 +109,10 @@ deploy_k8s_pod() {
 
     echo "Deploying '$name' on Kubernetes..."
     kubectl apply -f "$yaml_file"
+
+    # Force pod restart to ensure new image is used
+    echo "Restarting pods for $name..."
+    kubectl rollout restart deployment "$name" -n test
 }
 
 utils_changed=false
