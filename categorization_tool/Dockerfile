@@ -50,4 +50,4 @@ RUN pip install -r requirements.txt
 EXPOSE 9000
 
 # Command to run the app
-CMD ["python", "app.py"]
+CMD ["python", "main.py"]
