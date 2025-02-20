@@ -37,13 +37,13 @@ declare -A function_folders=(
 retrieve_and_store_env() {
     local function_name=$1
     local secret_name="${function_name}-k8s-env"
-    local env_file="${function_name}-k8s.env"
+    local env_file="/tmp/${function_name}-k8s.env"
     
     retrieve_secret "$secret_name" "$env_file"
     
     echo "Updating ConfigMap for $function_name..."
     kubectl delete configmap "${function_name}-env-config" --ignore-not-found
-    kubectl create configmap "${function_name}-env-config" --from-env-file="/tmp/$env_file"
+    kubectl create configmap "${function_name}-env-config" --from-env-file="$env_file"
 }
 
 # Build and push Docker image to Artifact Registry
