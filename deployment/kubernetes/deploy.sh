@@ -19,7 +19,7 @@ retrieve_secret() {
     gcloud secrets versions access latest --secret="$secret_name" > "$output_file"
 }
 
-_ACCESS_TOKEN=gcloud secrets versions access latest --secret="github-secret"
+_ACCESS_TOKEN=$(gcloud secrets versions access latest --secret="github-secret")
 
 git config --global url."https://$_ACCESS_TOKEN@github.com/".insteadOf "https://github.com/"
 git clone https://github.com/ravinaparteti/kubernetes.git
