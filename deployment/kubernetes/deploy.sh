@@ -38,12 +38,13 @@ retrieve_and_store_env() {
     local function_name=$1
     local secret_name="${function_name}-k8s-env"
     local env_file="/tmp/${function_name}-k8s.env"
+    local namespace="test"  # Set your namespace here
     
     retrieve_secret "$secret_name" "$env_file"
     
     echo "Updating ConfigMap for $function_name..."
-    kubectl delete configmap "${function_name}-env-config" --ignore-not-found
-    kubectl create configmap "${function_name}-env-config" --from-env-file="$env_file"
+    kubectl delete configmap "${function_name}-env-config" -n "$namespace" --ignore-not-found
+    kubectl create configmap "${function_name}-env-config" --from-env-file="$env_file" -n "$namespace"
 }
 
 # Build and push Docker image to Artifact Registry
