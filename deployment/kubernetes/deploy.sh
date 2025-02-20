@@ -11,9 +11,6 @@ authenticate_gke() {
 }
 
 
-echo "Retrieving 'service-account.json' from Secret Manager..."
-gcloud secrets versions access latest --secret="service-account" > key.json
-
 ls
 
 # Function to retrieve secrets from Secret Manager and store in a file
@@ -87,7 +84,11 @@ deploy_k8s_pod() {
     pwd
     echo "Copying 'utils' folder for $name deployment"
     cp -r "$(git rev-parse --show-toplevel)/utils" .
+    echo "Retrieving 'service-account.json' from Secret Manager..."
+    gcloud secrets versions access latest --secret="service-account" > key.json
 
+    echo "----------------------------------------"
+    ls
     cd - || exit 1
     
     build_and_push_image "$name"
