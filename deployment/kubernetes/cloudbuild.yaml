@@ -1,0 +1,21 @@
+# Cloud Build Configuration
+
+# This Cloud Build configuration automates the deployment of Cloud Functions in Google Cloud.
+# The process involves the following steps:
+
+# 1. Set up logging to only log to Cloud Logging (CLOUD_LOGGING_ONLY).
+# 2. Grant execute permission to the deploy script (deploy.sh).
+# 3. Run the deploy.sh script to deploy the Cloud Function to Google Cloud.
+
+# The Cloud Build service will execute this configuration on each build trigger to deploy the Cloud Function
+
+options:
+  logging: CLOUD_LOGGING_ONLY
+steps:
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        chmod +x deployment/kubernetes/deploy.sh
+        ./deployment/kubernetes/deploy.sh
