@@ -19,9 +19,9 @@ retrieve_secret() {
     local output_file=$2
     echo "Retrieving secret: $secret_name"
     gcloud secrets versions access latest --secret="$secret_name" > "$output_file"
+    echo "-------------------------------"
+
 }
-echo "-------------------------------"
-ls
 echo "-------------------------------"
 
 _ACCESS_TOKEN=$(gcloud secrets versions access latest --secret="github-secret")
@@ -44,10 +44,15 @@ retrieve_and_store_env() {
     local secret_name="${function_name}-k8s-env"
     local env_file="/tmp/${function_name}-k8s.env"
     local namespace="test"  # Set your namespace here
+    echo "-------------------------------"
     ls
+    echo "-------------------------------"
+
     retrieve_secret "$secret_name" "$env_file"
     
     echo "Updating ConfigMap for $function_name..."
+    echo "-------------------------------"
+
     kubectl delete configmap "${function_name}-env-config" -n "$namespace" --ignore-not-found
     kubectl create configmap "${function_name}-env-config" --from-env-file="$env_file" -n "$namespace"
 }
@@ -80,8 +85,10 @@ deploy_k8s_pod() {
         echo "Error: Directory $path not found" 
         exit 1
     fi
-    
-    pwd
+    echo "-------------------------------"
+    ls
+    echo "-------------------------------"
+
     echo "Copying 'utils' folder for $name deployment"
     cp -r "$(git rev-parse --show-toplevel)/utils" .
     echo "Retrieving 'service-account.json' from Secret Manager..."
@@ -96,6 +103,9 @@ deploy_k8s_pod() {
     # Fetch deployment.yaml from Secret Manager
     local yaml_file="/tmp/${name}-deployment.yaml"
     retrieve_secret "${name}-deployment-yaml" "$yaml_file"
+
+    ls
+    echo "-------------------------------"
 
     echo "Deploying '$name' on Kubernetes..."
     kubectl apply -f "$yaml_file"
