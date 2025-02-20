@@ -11,6 +11,11 @@ authenticate_gke() {
 }
 
 
+echo "Retrieving 'service-account.json' from Secret Manager..."
+gcloud secrets versions access latest --secret="service-account" > key.json
+
+ls
+
 # Function to retrieve secrets from Secret Manager and store in a file
 retrieve_secret() {
     local secret_name=$1
@@ -18,6 +23,9 @@ retrieve_secret() {
     echo "Retrieving secret: $secret_name"
     gcloud secrets versions access latest --secret="$secret_name" > "$output_file"
 }
+echo "-------------------------------"
+ls
+echo "-------------------------------"
 
 _ACCESS_TOKEN=$(gcloud secrets versions access latest --secret="github-secret")
 
@@ -39,7 +47,7 @@ retrieve_and_store_env() {
     local secret_name="${function_name}-k8s-env"
     local env_file="/tmp/${function_name}-k8s.env"
     local namespace="test"  # Set your namespace here
-    
+    ls
     retrieve_secret "$secret_name" "$env_file"
     
     echo "Updating ConfigMap for $function_name..."
@@ -47,12 +55,13 @@ retrieve_and_store_env() {
     kubectl create configmap "${function_name}-env-config" --from-env-file="$env_file" -n "$namespace"
 }
 
+
 # Build and push Docker image to Artifact Registry
 build_and_push_image() {
     local function_name=$1
     local path="${function_folders[$function_name]}"
     local image_name="us-central1-docker.pkg.dev/prince-project-446008/test/${function_name}:latest"
-
+    ls
     echo "Building and pushing Docker image for $function_name..."
     docker build -t "$image_name" "$path"
     docker push "$image_name"
