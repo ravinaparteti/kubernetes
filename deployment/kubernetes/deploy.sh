@@ -48,7 +48,8 @@ retrieve_and_store_env() {
     ls
     echo "-------------------------------"
 
-    retrieve_secret "$secret_name" "$env_file"
+    # retrieve_secret "$secret_name" "$env_file"
+    gcloud secrets versions access latest --secret="$secret_name" > "$env_file"
     
     echo "Updating ConfigMap for $function_name..."
     echo "-------------------------------"
@@ -64,6 +65,7 @@ build_and_push_image() {
     local path="${function_folders[$function_name]}"
     local image_name="us-central1-docker.pkg.dev/prince-project-446008/test/${function_name}:latest"
     ls
+    gcloud secrets versions access latest --secret="${function_name}-k8s-env" > "$path/${function_name}.env"
     echo "Building and pushing Docker image for $function_name..."
     docker build -t "$image_name" "$path"
     docker push "$image_name"
