@@ -105,11 +105,11 @@ deploy_k8s_pod() {
     # build_and_push_image "$name"
 
     # Fetch deployment.yaml from Secret Manager
-    # local yaml_file="/tmp/${name}-deployment.yaml"
-    # retrieve_secret "${name}-deployment-yaml" "$yaml_file"
+    local yaml_file="/tmp/${name}-deployment.yaml"
+    retrieve_secret "${name}-deployment-yaml" "$yaml_file"
 
-    # echo "Deploying '$name' on Kubernetes..."
-    # kubectl apply -f "$yaml_file"
+    echo "Deploying '$name' on Kubernetes..."
+    kubectl apply -f "$yaml_file"
 
     # Force pod restart to ensure new image is used
     echo "Restarting pods for $name..."
