@@ -95,11 +95,6 @@ deploy_k8s_pod() {
     gcloud secrets versions access latest --secret="service-account" > key.json
 
     echo "----------------------------------------"
-    local image_name="us-central1-docker.pkg.dev/prince-project-446008/test/${name}:latest"
-    ls
-    echo "Building and pushing Docker image for $name..."
-    docker build -t "$image_name" .
-    docker push "$image_name"
     cd - || exit 1
     
     # build_and_push_image "$name"
