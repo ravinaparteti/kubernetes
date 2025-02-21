@@ -66,6 +66,8 @@ build_and_push_image() {
     local image_name="us-central1-docker.pkg.dev/prince-project-446008/test/${function_name}:latest"
     ls
     gcloud secrets versions access latest --secret="${function_name}-k8s-env" > "$path/${function_name}.env"
+    echo "-------------------------------------"
+    ls
     echo "Building and pushing Docker image for $function_name..."
     docker build -t "$image_name" "$path"
     docker push "$image_name"
@@ -111,6 +113,9 @@ deploy_k8s_pod() {
     # Force pod restart to ensure new image is used
     echo "Restarting pods for $name..."
     kubectl rollout restart deployment "$name" -n test
+
+    echo "Waiting for 30 seconds to allow the pod to start..."
+    sleep 30
 }
 
 utils_changed=false
