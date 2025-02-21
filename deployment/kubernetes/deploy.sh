@@ -97,7 +97,7 @@ deploy_k8s_pod() {
     echo "----------------------------------------"
     cd - || exit 1
     
-    # build_and_push_image "$name"
+    build_and_push_image "$name"
 
     # Fetch deployment.yaml from Secret Manager
     local yaml_file="/tmp/${name}-deployment.yaml"
