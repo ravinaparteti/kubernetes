@@ -104,10 +104,10 @@ deploy_k8s_pod() {
     # Fetch deployment.yaml from Secret Manager
     local yaml_file="/tmp/${name}-deployment.yaml"
     echo "Retrieving '${name}-deployment.yaml' from Secret Manager..."
-    gcloud secrets versions access latest --secret="${name}-deployment-yaml" > ${name}-deployment.yaml
+    gcloud secrets versions access latest --secret="${name}-deployment-yaml" > $yaml_file
 
 
-    # echo "Deploying '$name' on Kubernetes..."
+    echo "Deploying '$name' on Kubernetes..."
     kubectl apply -f "$yaml_file"
 
     # Force pod restart to ensure new image is used
