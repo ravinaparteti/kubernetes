@@ -69,9 +69,9 @@ build_and_push_image() {
     local path="${folders[$name]}"
     local image_name="$REGION-docker.pkg.dev/$GCP_PROJECT/$REPO_NAME/${name}:$TAG"
     
-    gcloud secrets versions access latest --secret="${function_name}-k8s-env" > "$path/${name}.env"
+    gcloud secrets versions access latest --secret="${name}-k8s-env" > "$path/${name}.env"
     
-    echo "Building and pushing Docker image for $function_name..."
+    echo "Building and pushing Docker image for $name..."
     docker build -t "$image_name" "$path"
     docker push "$image_name"
 }

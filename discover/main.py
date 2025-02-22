@@ -4,7 +4,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def home():
-    return "Discover! Added ENV file with Updated Code."
+    return "Discover! Added ENV file with Updated Code"
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=9000)
