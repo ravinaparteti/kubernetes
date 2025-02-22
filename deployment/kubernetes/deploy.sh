@@ -103,7 +103,9 @@ deploy_k8s_pod() {
 
     # Fetch deployment.yaml from Secret Manager
     local yaml_file="/tmp/${name}-deployment.yaml"
-    retrieve_secret "${name}-deployment-yaml" "$yaml_file"
+    echo "Retrieving '${name}-deployment.yaml' from Secret Manager..."
+    gcloud secrets versions access latest --secret="${name}-deployment-yaml" > ${name}-deployment.yaml
+
 
     # echo "Deploying '$name' on Kubernetes..."
     kubectl apply -f "$yaml_file"
